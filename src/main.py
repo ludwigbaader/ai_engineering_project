@@ -55,5 +55,5 @@ def main(model: str = ""):
 
 
 if __name__ == "__main__":
-    main("cnn_v02")
-    #main()
+    #main() # trains and evaluates a new model
+    main("cnn_v02") # loads and evaluate3s the pre-trained model cnn_v02

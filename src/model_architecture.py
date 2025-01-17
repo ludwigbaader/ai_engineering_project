@@ -130,8 +130,8 @@ def load_model(name: str, location: str = "models") -> models.Sequential:
     model: models.Sequential = models.model_from_json(json.dumps(model_config["model"]))
     model.compile(
         optimizer='adam',
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[metrics.Accuracy(), metrics.Precision(thresholds=0), metrics.Recall()]
+        loss='categorical_crossentropy',
+        metrics=['accuracy', 'precision', 'recall']
     )
 
     # Load the newest model weights
