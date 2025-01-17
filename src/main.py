@@ -18,7 +18,7 @@ from data_augmentation import augment_data
 from data_exploration import explore_data
 
 
-def main():
+def main(model: str = ""):
     # load the mnist dataset
     (img_train, lbl_train), (img_test, lbl_test) = datasets.mnist.load_data()
     print("MNIST dataset loaded successfully.\n")
@@ -31,17 +31,22 @@ def main():
     print("Augmented Dataset of handwritten digits:")
     explore_data(img_aug_train, lbl_aug_train, img_aug_test, lbl_aug_test, show_plots=False)
 
-    cnn_model = build_model("cnn_v01", location="models")
-    training_history = train_model(
-        cnn_model, 
-        img_train, lbl_train, 
-        img_test, lbl_test, 
-        epochs=10, 
-        checkpoint_directory=os.path.join("models", "cnn_v01")
-    )
-    print(training_history.history['accuracy'])
-
-    test_loss, test_acc = evaluate_model(cnn_model, img_test, lbl_test)
+    # no model specified, create and train a new model
+    if model == "":
+        cnn_model = build_model("cnn_v01", location="models")
+        training_history = train_model(
+            cnn_model, 
+            img_aug_train, lbl_aug_train, 
+            img_aug_test, lbl_aug_test, 
+            epochs=10, 
+            checkpoint_directory=os.path.join("models", "cnn_v01")
+        )
+    
+    # load the specified model
+    else:
+        cnn_model = load_model(model)
+    
+    test_loss, test_acc = evaluate_model(cnn_model, img_aug_test, lbl_aug_test)
     print(f"Test loss: {test_loss}, Test accuracy: {test_acc}")
 
 
@@ -158,7 +163,10 @@ def load_model(name: str, location: str = "models") -> models.Sequential:
         return None
 
     # Load a model from the specified location
-    model: models.Sequential = models.model_from_json(os.path.join(location, name, "model_config.json"))
+    f = open(os.path.join(location, name, "model_config.json"))
+    model_config = json.loads(f.read())
+
+    model: models.Sequential = models.model_from_json(json.dumps(model_config["model"]))
     model.compile(
         optimizer='adam',
         loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -179,4 +187,4 @@ def load_model(name: str, location: str = "models") -> models.Sequential:
 
 
 if __name__ == "__main__":
-    main()
+    main("cnn_v01")

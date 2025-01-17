@@ -36,4 +36,4 @@ def explore_data(img_train: np.uint8, lbl_train: np.uint8, img_test: np.uint8, l
         plt.tight_layout()
         plt.show()
     
-    print("\n")
+    print()
