@@ -28,3 +28,9 @@ The model consists of a CNN with multiple layers. Layers:
 - 7th layer (output layer): Dense layer with 10 units
 
 This architecture results in a total of 93,322 trainable parameters.
+
+## Using the model
+
+The model can be accessed using the `get_digit_classification_model(model: str = "")` function from `main.py`. This either generates and trains a new model based on the currently specified configuration and the current dataset, or loads a pre-existing model which can be specified by the `model: str` parameter.
+
+The model that this function returns can be used to make predictions on new data using the `model.predict(new_data)` function.
