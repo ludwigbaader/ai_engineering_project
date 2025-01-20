@@ -1,5 +1,5 @@
 ---
-license: gpl-v3.0
+license: gpl-3.0
 language:
 - en
 datasets:
