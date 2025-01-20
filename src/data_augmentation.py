@@ -4,13 +4,12 @@ from scipy.ndimage import shift, gaussian_filter
 
 
 def augment_data(img_train: np.uint8, lbl_train: np.uint8, img_test: np.uint8, lbl_test: np.uint8) -> tuple[tuple[np.uint8, np.uint8], tuple[np.uint8, np.uint8]]:
-    # Data Augmentation: Enhance the dataset's diversity and robustness through augmentation techniques.
+    '''Augment the training and testing datasets to enhance the dataset's diversity and robustness.'''
 
     # augmentation techniques:
     # - shifting the images by a few pixels
     # - adding noise to the images
     # - blurring the images
-    # - synthetic data generation -> using a GAN to generate new images
 
     print("Augmenting the training and testing datasets...")
     print("Generating new images through shifting...")
@@ -30,11 +29,6 @@ def augment_data(img_train: np.uint8, lbl_train: np.uint8, img_test: np.uint8, l
 
     img_train_blurred, lbl_train_blurred = augment_images_blur(img_train, lbl_train, 2)
     img_test_blurred, lbl_test_blurred = augment_images_blur(img_test, lbl_test, 2)
-
-    #print("Generating synthetic images")
-
-    #img_train_synthetic, lbl_train_synthetic = augment_images_synthetic(img_train, lbl_train, 1000)
-    #img_test_synthetic, lbl_test_synthetic = augment_images_synthetic(img_test, lbl_test, 1000)
 
     img_train_augmented = np.concatenate((img_train, img_train_shifted, img_train_noisy, img_train_blurred))
     lbl_train_augmented = np.concatenate((lbl_train, lbl_train_shifted, lbl_train_noisy, lbl_train_blurred))
@@ -121,14 +115,3 @@ def augment_images_blur(images: np.uint8, labels: np.uint8, amount: float) -> tu
         blurred_images.append(blurred_image)
     
     return (np.array(blurred_images), labels)
-
-
-def augment_images_synthetic(images: np.uint8, labels: np.uint8, count: int) -> tuple[np.uint8, np.uint8]:
-    # Use a Generative Adversarial Network (GAN) to generate synthetic images
-
-    # TODO - implement image generation using a GAN
-
-    temp_rnd_images = np.random.randint(count, 28, 28)
-    temp_rnd_labels = np.random.randint(count, )
-
-    return (temp_rnd_images, temp_rnd_labels)

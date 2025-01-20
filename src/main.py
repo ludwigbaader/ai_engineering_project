@@ -19,6 +19,8 @@ from model_architecture import build_model, train_model, evaluate_model, load_mo
 
 
 def get_digit_classification_model(model: str = "", evaluate: bool = True) -> models.Sequential:
+    '''Trains a new model or loads a pre-trained model for digit classification using the MNIST dataset.'''
+
     # load the mnist dataset
     (img_train, lbl_train), (img_test, lbl_test) = datasets.mnist.load_data()
     print("MNIST dataset loaded successfully.\n")
@@ -65,6 +67,8 @@ def get_digit_classification_model(model: str = "", evaluate: bool = True) -> mo
 
 
 def list_models() -> list[str]:
+    '''Prints and returns a list of the names of all available models in the models directory.'''
+
     models = os.listdir("models")
     print("Available models:")
     for model in models:

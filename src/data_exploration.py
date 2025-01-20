@@ -3,7 +3,7 @@ import numpy as np
 
 
 def explore_data(img_train: np.uint8, lbl_train: np.uint8, img_test: np.uint8, lbl_test: np.uint8, show_plots=True):
-    # Data Exploration: Understand the dataset's characteristics, such as size, class distribution, and data types.
+    '''Understand the dataset's characteristics, such as size, class distribution, and data types.'''
 
     # total number of entries in the training and testing datasets
     train_size = img_train.shape[0]
