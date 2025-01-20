@@ -10,7 +10,7 @@
 # - SE Best Practices: Follow SE best practices for code quality, including modularization and version control.
 
 import os
-from keras import datasets, utils
+from keras import datasets, utils, models
 import tensorflow as tf
 
 from data_augmentation import augment_data
@@ -18,7 +18,7 @@ from data_exploration import explore_data
 from model_architecture import build_model, train_model, evaluate_model, load_model
 
 
-def main(model: str = ""):
+def get_digit_classification_model(model: str = "", evaluate: bool = True) -> models.Sequential:
     # load the mnist dataset
     (img_train, lbl_train), (img_test, lbl_test) = datasets.mnist.load_data()
     print("MNIST dataset loaded successfully.\n")
@@ -45,15 +45,34 @@ def main(model: str = ""):
             epochs=10, 
             checkpoint_directory=os.path.join("models", "cnn_v02")
         )
+
+        print("Created a new model according to the current architecture.")
     
     # load the specified model
     else:
         cnn_model = load_model(model)
+
+        print(f"Loaded model {model} successfully.")
     
-    test_loss, test_acc, test_precision, test_recall = evaluate_model(cnn_model, img_aug_test, lbl_aug_test_one_hot)
-    print(f"Test loss: {test_loss}, Test accuracy: {test_acc}, Test precision: {test_precision}, Test recall: {test_recall}")
+    if evaluate:
+        print("Evaluating the model on the testing dataset")
+
+        test_loss, test_acc, test_precision, test_recall = evaluate_model(cnn_model, img_aug_test, lbl_aug_test_one_hot)
+        
+        print(f"Test loss: {test_loss}, Test accuracy: {test_acc}, Test precision: {test_precision}, Test recall: {test_recall}")
+
+    return cnn_model
+
+
+def list_models() -> list[str]:
+    models = os.listdir("models")
+    print("Available models:")
+    for model in models:
+        print(model)
+    
+    return models
 
 
 if __name__ == "__main__":
-    #main() # trains and evaluates a new model
-    main("cnn_v02") # loads and evaluate3s the pre-trained model cnn_v02
+    #get_digit_classification_model() # trains and evaluates a new model
+    get_digit_classification_model("cnn_v02") # loads and evaluate3s the pre-trained model cnn_v02
